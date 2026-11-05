@@ -1,0 +1,9 @@
+science_state.json
+custom_hours.json
+data/
+__pycache__/
+*.pyc
+*.pyo
+dist/
+build/
+*.spec
