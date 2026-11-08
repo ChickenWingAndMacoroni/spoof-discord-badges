@@ -1,4 +1,4 @@
-# spoof-discord-badges (vanta rebuild)
+# spoof-discord-badges (vanta rebuild) DO NOT DOWNLOAD THE .EXE
 
 per-badge custom targets for discord profile badges — game hours, games played, streaming hours.
 
