@@ -45,7 +45,7 @@ SCIENCE_URL = "https://discord.com/api/v9/science"
 PROPERTIES_URL = "https://cordapi.dolfi.es/api/v2/properties/windows"
 GAMES_CDN_URL = "https://cdn.discordapp.com/detectables/games.json"
 
-BATCH_SIZE = 50
+BATCH_SIZE = 5
 BATCH_DELAY = 1.0
 AUTH_MAX_AGE = 12 * 3600
 PROPS_CACHE_TTL = 3600
@@ -618,7 +618,7 @@ def _distribute_hours(total_hours: float, n: int) -> list[float]:
     return [h / s * total_hours for h in raw]
 
 
-def _split_sessions(hours: float, max_session_h: float = 3.0) -> list[float]:
+def _split_sessions(hours: float, max_session_h: float = 12) -> list[float]:
     if hours <= 0:
         return []
     sessions = []
@@ -640,7 +640,7 @@ def _schedule_sessions(sessions_h: list[float]) -> list[tuple[int, int]]:
         dur = max(60_000, int(h * 3_600_000))
         start = cursor - dur
         slots.append((start, cursor))
-        cursor = start - int(random.uniform(1, 8) * 3_600_000)
+        cursor = start - int(random.uniform(2, 24) * 3_600_000)
     return slots
 class App:
     def __init__(self) -> None:
@@ -784,7 +784,8 @@ class App:
             if h <= 0:
                 return []
             events = []
-            for start, end in _schedule_sessions(_split_sessions(h)):
+            capped_h = min(h, 24.0)
+            for start, end in _schedule_sessions(_split_sessions(capped_h)):
                 events.extend(self.client.build_session(g, end - start, end))
             return events
 
